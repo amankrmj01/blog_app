@@ -1,6 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionName="Inital"
+    android:versionCode="1.0">
     <application
-        android:label="blog_app"
+        android:label="Blog"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
