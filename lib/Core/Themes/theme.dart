@@ -15,9 +15,10 @@ ThemeData lightMode = ThemeData.light().copyWith(
     ),
   ),
   // brightness: Brightness.light,
-  colorScheme: ColorScheme.light(),
-  textTheme: TextTheme(
-      titleMedium: TextStyle(color: Colors.black)
+  colorScheme: const ColorScheme.light(),
+  textTheme: const TextTheme(
+    titleMedium: TextStyle(color: Colors.black),
+    titleSmall: TextStyle(color: Colors.black),
   ),
 );
 
@@ -31,8 +32,9 @@ ThemeData darkMode = ThemeData.dark().copyWith(
     color: Color.lerp(Colors.black, Colors.white, 0.15),
   ),
   // brightness: Brightness.dark,
-  textTheme: TextTheme(
-    titleMedium: TextStyle(color: Colors.black)
+  textTheme: const TextTheme(
+    titleMedium: TextStyle(color: Colors.black),
+    titleSmall: TextStyle(color: Colors.white),
   ),
-  colorScheme: ColorScheme.dark(),
+  colorScheme: const ColorScheme.dark(),
 );

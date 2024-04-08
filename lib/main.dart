@@ -1,14 +1,46 @@
-import 'package:blog_app/Features/Auth/Presentation/Pages/signup_page.dart';
+import 'dart:io';
+
+import 'package:blog_app/Features/Auth/Data/datasource/auth_remote_databse.dart';
+import 'package:blog_app/Features/Auth/Data/repository/auth_repo_impl.dart';
+import 'package:blog_app/Features/Auth/Domain/usecases/user_signup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'Core/Secrets/appSecretsSupabase.dart';
 import 'Core/Themes/theme_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'Features/Auth/Presentation/Pages/login_page.dart';
+import 'Features/Auth/Presentation/bloc/auth_bloc.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
-    child: const SplashScreen(),
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final supabse = await Supabase.initialize(
+      url: SupaBase.supaBaseUrl, anonKey: SupaBase.supaBaseKey);
+  // runApp(ChangeNotifierProvider(
+  //   create: (context) => ThemeProvider(),
+  //   child: const SplashScreen(),
+  // ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => AuthBloc(
+              userSignUp: UserSignUp(
+                AuthRepositoryImpl(
+                  authRemoteDataSource:
+                      AuthRemoteDataSourceImpl(supabaseClient: supabse.client),
+                ),
+              ),
+            ),
+          )
+        ],
+        child: const SplashScreen(),
+      ),
+    ),
+  );
 }
 
 class SplashScreen extends StatefulWidget {
@@ -19,7 +51,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
             )
           ],
         ),
-        body: SignUpPage(),
+        body: LoginPage(),
       ),
     );
   }
@@ -100,6 +131,47 @@ class SwitchMode extends StatelessWidget {
             color: Colors.white,
           );
         },
+      ),
+    );
+  }
+}
+
+class MyCameraApp extends StatefulWidget {
+  const MyCameraApp({super.key});
+
+  @override
+  _MyCameraAppState createState() => _MyCameraAppState();
+}
+
+class _MyCameraAppState extends State<MyCameraApp> {
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
+
+  Future<void> _getImageFromCamera() async {
+    final image = await _picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Camera App')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (_image != null)
+              Image.file(File(_image!.path))
+            else
+              const Text('No image selected'),
+            ElevatedButton(
+              onPressed: _getImageFromCamera,
+              child: Text('Capture Image from Camera'),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -26,12 +26,6 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
   late bool _obscureText;
 
   @override
-  void dispose() {
-    super.dispose();
-    widget.controller.dispose();
-  }
-
-  @override
   void initState() {
     _obscureText = !widget.visible;
     super.initState();

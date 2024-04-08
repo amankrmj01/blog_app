@@ -23,128 +23,152 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _confirmPassword = TextEditingController();
   bool _confirmFilled = true;
   bool _genderFilled = false;
+  // late FocusScopeNode currentFocus;
+
+  @override
+  void dispose() {
+    _userName.dispose();
+    _email.dispose();
+    _age.dispose();
+    _confirmPassword.dispose();
+    _password.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // currentFocus = FocusScope.of(context);
     return Scaffold(
-      body: Center(
-        child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 100,
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: 60,
-              width: 120,
-              decoration: BoxDecoration(
-                color: Colors.yellowAccent,
-                borderRadius: BorderRadius.circular(20),
+
+      body: GestureDetector(
+        onTap: () {
+          // if (!currentFocus.hasPrimaryFocus) {
+          //   currentFocus.unfocus();
+          // }
+        },
+        child: Center(
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 100,
               ),
-              child: Text(
-                'SignUp',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontSize: 30),
+              Container(
+                alignment: Alignment.center,
+                height: 60,
+                width: 120,
+                decoration: BoxDecoration(
+                  color: Colors.yellowAccent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'SignUp',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontSize: 30),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: GestureDetector(
-                // onTap
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      TextFieldCustom(
-                        controller: _userName,
-                        icon: const Icon(Icons.person_outline),
-                        text: 'User Name',
-                        visible: true,
-                      ),
-                      onEmpty('username', _userFilled),
-                      TextFieldCustom(
-                        controller: _email,
-                        icon: const Icon(Icons.alternate_email_rounded),
-                        text: 'Email',
-                        visible: true,
-                      ),
-                      onEmpty('email', _emailFilled),
-                      TextFieldCustom(
-                        controller: _age,
-                        icon: const Icon(Icons.numbers_outlined),
-                        text: 'Age',
-                        visible: true,
-                      ),
-                      onEmpty('age', _ageFilled),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        child: const MyDropdown(),
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: _genderFilled
-                            ? const Text(
-                                'choose the gender*',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            : const SizedBox(),
-                      ),
-                      TextFieldCustom(
-                        controller: _password,
-                        icon: const Icon(Icons.lock_outline),
-                        text: 'Password',
-                        visible: false,
-                      ),
-                      onEmpty('password', _passwordFilled),
-                      TextFieldCustom(
-                        controller: _confirmPassword,
-                        icon: const Icon(Icons.lock_outline),
-                        text: 'Confirm Password',
-                        visible: false,
-                      ),
-                      onEmpty('confirm password', _confirmFilled),
-                    ],
+              const SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  // onTap
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        TextFieldCustom(
+                          // focusNode: currentFocus,
+                          controller: _userName,
+                          icon: const Icon(Icons.person_outline),
+                          text: 'User Name',
+                          visible: true,
+                        ),
+                        onEmpty('username', _userFilled),
+                        TextFieldCustom(
+                          controller: _email,
+                          icon: const Icon(Icons.alternate_email_rounded),
+                          text: 'Email',
+                          visible: true,
+                        ),
+                        onEmpty('email', _emailFilled),
+                        TextFieldCustom(
+                          controller: _age,
+                          icon: const Icon(Icons.numbers_outlined),
+                          text: 'Age',
+                          visible: true,
+                        ),
+                        onEmpty('age', _ageFilled),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: const MyDropdown(),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: _genderFilled
+                              ? const Text(
+                                  'choose the gender*',
+                                  style: TextStyle(color: Colors.red),
+                                )
+                              : const SizedBox(),
+                        ),
+                        TextFieldCustom(
+                          controller: _password,
+                          icon: const Icon(Icons.lock_outline),
+                          text: 'Password',
+                          visible: false,
+                        ),
+                        onEmpty('password', _passwordFilled),
+                        TextFieldCustom(
+                          controller: _confirmPassword,
+                          icon: const Icon(Icons.lock_outline),
+                          text: 'Confirm Password',
+                          visible: false,
+                        ),
+                        onEmpty('confirm password', _confirmFilled),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: InkWell(
-                onTap: () {
-                  if (_MyDropdownState.dropdownValue == 'Gender') {
-                    setState(() {
-                      _genderFilled = true;
-                    });
-                  } else {
-                    setState(() {
-                      _genderFilled = false;
-                    });
-                  }
-                  // showDialogWithText('Hello');
-                  checkIfEmpty(() => _userName.text.isNotEmpty,
-                      (value) => _userFilled = value);
-                  checkIfEmpty(() => _password.text.isNotEmpty,
-                      (value) => _passwordFilled = value);
-                  checkIfEmpty(() => _email.text.isNotEmpty,
-                      (value) => _emailFilled = value);
-                  checkIfEmpty(() => _confirmPassword.text.isNotEmpty,
-                      (value) => _confirmFilled = value);
-                  checkIfEmpty(() => _age.text.isNotEmpty,
-                      (value) => _ageFilled = value);
-                },
-                child: const Text('Press me once'),
-              ),
-            )
-          ],
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: InkWell(
+                  onTap: () {
+                    if (_MyDropdownState.dropdownValue == 'Gender') {
+                      setState(() {
+                        _genderFilled = true;
+                      });
+                    } else {
+                      setState(() {
+                        _genderFilled = false;
+                      });
+                    }
+                    // showDialogWithText('Hello');
+                    checkIfEmpty(() => _userName.text.isNotEmpty,
+                        (value) => _userFilled = value);
+                    checkIfEmpty(() => _password.text.isNotEmpty,
+                        (value) => _passwordFilled = value);
+                    checkIfEmpty(() => _email.text.isNotEmpty,
+                        (value) => _emailFilled = value);
+                    checkIfEmpty(() => _confirmPassword.text.isNotEmpty,
+                        (value) => _confirmFilled = value);
+                    checkIfEmpty(() => _age.text.isNotEmpty,
+                        (value) => _ageFilled = value);
+                  },
+                  child: Text(
+                    'Press me once',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
